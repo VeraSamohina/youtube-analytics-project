@@ -12,10 +12,17 @@ class Video(Channel):
         self.video_id = video_id                                                             # id видео
         video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
                                                id=video_id).execute()
-        self.video_title = video_response['items'][0]['snippet']['title']                    # название видео
-        self.video_url = f'https://www.youtube.com/watch?v={video_id}'                       # ссылка на видео
-        self.views = video_response['items'][0]['statistics']['viewCount']                   # количество просмотров
-        self.likes = video_response['items'][0]['statistics']['likeCount']                   # количество лайков
+        try:
+            self.title = video_response['items'][0]['snippet']['title']                    # название видео
+            self.video_url = f'https://www.youtube.com/watch?v={video_id}'                 # ссылка на видео
+            self.views = video_response['items'][0]['statistics']['viewCount']             # количество просмотров
+            self.like_count = video_response['items'][0]['statistics']['likeCount']        # количество лайков
+        except IndexError:
+            self.title = None
+            self.video_url = None
+            self.views = None
+            self.like_count = None
+
 
     def __str__(self) -> str:
         """
